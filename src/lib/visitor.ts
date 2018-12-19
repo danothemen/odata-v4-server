@@ -104,7 +104,12 @@ export class ResourcePathVisitor {
 
     protected async VisitODataUri(node: Token, context: any) {
         await this.Visit(node.value.resource, context);
-        await this.Visit(node.value.query, context, this.navigation[this.navigation.length - 1].node[ODATA_TYPE]);
+        if(this.navigation[this.navigation.length - 1]){
+            await this.Visit(node.value.query, context, this.navigation[this.navigation.length - 1].node[ODATA_TYPE]);
+        }
+        else{
+            await this.Visit(node.value.query, context);
+        }
         this.navigation.forEach(it => {
             if (it.params) {
                 for (let prop in it.params) {
